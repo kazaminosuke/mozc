@@ -44,6 +44,22 @@ jobs:
         run: |
           python build_tools/update_deps.py
 
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# ↓ここから追加するステップ
+      - name: Merge UT Dictionary
+        shell: bash
+        working-directory: ./src
+        run: |
+          # 1. 圧縮された辞書ファイルを解凍する
+          tar -xjf ../mozcdic-ut.txt.tar.bz2
+          # 2. 解凍したUT辞書を、Mozcの標準辞書の末尾に追記する
+          cat mozcdic-ut.txt >> data/dictionary_oss/dictionary00.txt
+          # 3. 巨大なファイルを消してディスクスペースを節約する
+          rm mozcdic-ut.txt
+          rm ../mozcdic-ut.txt.tar.bz2
+# ↑ここまで
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
       - name: Build Qt
         shell: cmd
         working-directory: .\src
